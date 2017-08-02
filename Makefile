@@ -1,5 +1,5 @@
 
-IMAGE_NAME = elixir
+IMAGE_NAME = cagedata/s2i-elixir
 
 .PHONY: build
 build:
