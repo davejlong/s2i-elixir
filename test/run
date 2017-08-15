@@ -38,23 +38,25 @@ container_exists() {
 }
 
 container_ip() {
-  if [ ! -z "$DOCKER_HOST" ] && [[ "$OSTYPE" =~ 'darwin' ]]; then
-    docker-machine ip
-  else
-    docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
-  fi
+  # if [ ! -z "$DOCKER_HOST" ] && [[ "$OSTYPE" =~ 'darwin' ]]; then
+  #   docker-machine ip
+  # else
+  #   docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
+  # fi
+  echo "127.0.0.1"
 }
 
 container_port() {
-  if [ ! -z "$DOCKER_HOST" ] && [[ "$OSTYPE" =~ 'darwin' ]]; then
-    docker inspect --format="{{(index .NetworkSettings.Ports \"$test_port/tcp\" 0).HostPort}}" "$(cat "${cid_file}")"
-  else
-    echo $test_port
-  fi
+  # if [ ! -z "$DOCKER_HOST" ] && [[ "$OSTYPE" =~ 'darwin' ]]; then
+  #   docker inspect --format="{{(index .NetworkSettings.Ports \"$test_port/tcp\" 0).HostPort}}" "$(cat "${cid_file}")"
+  # else
+  #   echo $test_port
+  # fi
+  docker inspect --format="{{(index .NetworkSettings.Ports \"$test_port/tcp\" 0).HostPort}}" "$(cat "${cid_file}")"
 }
 
 run_s2i_build() {
-  s2i build --incremental=true ${s2i_args} file://${test_dir}/test-app ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+  s2i build --incremental=true ${s2i_args} file://${test_dir}/test_app ${IMAGE_NAME} ${IMAGE_NAME}-testapp
 }
 
 prepare() {
@@ -63,7 +65,7 @@ prepare() {
     exit 1
   fi
   # s2i build requires the application is a valid 'Git' repository
-  pushd ${test_dir}/test-app >/dev/null
+  pushd ${test_dir}/test_app >/dev/null
   git init
   git config user.email "build@localhost" && git config user.name "builder"
   git add -A && git commit -m "Sample commit"

@@ -24,4 +24,6 @@ RUN groupadd --gid 1001 app \
 WORKDIR /opt/app-root/src
 USER 1001
 
+EXPOSE 4000
+
 CMD ["/usr/libexec/s2i/usage"]
